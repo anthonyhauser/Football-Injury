@@ -30,6 +30,13 @@ for(i in 1:length(chunks)){
   player_injuries_df = tm_player_injury_history(player_urls = players_urls[chunks[[i]]])
   saveRDS(player_injuries_df,paste0("data/player_injuries_df_",names(chunks)[i],".RDS"))
 }
+player_injuries_df = rbindlist(lapply(as.list(names(chunks)),function(x)
+                              readRDS(paste0("data/player_injuries_df_",x,".RDS"))))
+for(i in 1:length(chunks)){
+  print(i)
+  player_injuries_df = tm_player_injury_history(player_urls = players_urls[chunks[[i]]])
+  saveRDS(player_injuries_df,paste0("data/player_injuries_df_",names(chunks)[i],".RDS"))
+}
 #load data
 player_injuries_df = readRDS("data/injury_history.RDS")
 player_injuries_df2 = rbindlist(team_players) %>% 
@@ -52,6 +59,14 @@ player_injuries_df2 %>%
 player_injuries_df2 %>% 
   dplyr::mutate(duration=as.numeric(gsub(" days", "", duration))) %>% 
   filter(injury=="Cruciate ligament tear",!is.na(injured_until),duration<180)
+
+
+
+
+player_injuries_df %>%
+  group_by(player_name,player_url,season) %>% 
+  dplyr::summarise(injury_acl = any(grepl("Cruciate ligament",injury)),.groups="drop")
+  group_by(season_injured) %>% summarise(n_acl=sum(grepl("Cruciate ligament",injury))) %>% View()
 
 
 
