@@ -1,11 +1,6 @@
-library(tidyverse)
-library(rstan)
-library(flextable)
-library(officer)
-library(readxl)
-library(data.table)
-library(tidyfast)
-library(scales)
+library(pacman)
+p_load(tidyverse,rstan,flextable,officer,readxl,data.table,tidyfast,scales)
+library(devtools)
 library(worldfootballR) #devtools::install_github("JaseZiv/worldfootballR")
 
 #cmdstanr
